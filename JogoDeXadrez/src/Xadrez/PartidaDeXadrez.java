@@ -1,5 +1,6 @@
 package Xadrez;
 
+import Tabuleiro.posicao.Peca;
 import Tabuleiro.posicao.Posicao;
 import Tabuleiro.posicao.Tabuleiro;
 import Xadrez.pecas.Rei;
@@ -26,6 +27,28 @@ public class PartidaDeXadrez {
 
     private void colocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
         tabuleiro.colocarPeca(new PosicaoXadrez(coluna, linha).toPosicao(),peca);
+    }
+
+    public  PecaDeXadrez performarJogada(PosicaoXadrez posicaoOrigem, PosicaoXadrez posicaoDestino) {
+        Posicao origem = posicaoOrigem.toPosicao();
+        Posicao destino = posicaoDestino.toPosicao();
+        validarPosicaoOrigem(origem);
+        Peca pecaCapturada = realizarMovimento(origem,destino);
+        return (PecaDeXadrez) pecaCapturada;
+    }
+
+    private Peca realizarMovimento(Posicao origem, Posicao destino) {
+        Peca p = tabuleiro.removerPeca(origem);
+        Peca capturada = tabuleiro.removerPeca(destino);
+        tabuleiro.colocarPeca(destino, p);
+        return capturada;
+    }
+
+    private void validarPosicaoOrigem(Posicao origem) {
+        if (!tabuleiro.jaTemPeca(origem))
+            throw new XadrezException("Não há peça na posição "+origem);
+        if(!tabuleiro.peca(origem).haMovimentoPossivel())
+            throw new XadrezException("Não há movimentos possíveis para a peça selecionada");
     }
 
     private void setupInicial(){
