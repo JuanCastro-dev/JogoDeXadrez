@@ -26,11 +26,10 @@ public abstract class Peca {
         boolean[][] mat = movimentosPossiveis();
         for (int i = 0; i < mat.length; i++) {
             for (int j = 0; j < mat[i].length; j++) {
-                if (mat[i][j] == true)
+                if (mat[i][j])
                     return true;
-                else
-                    return false;
             }
         }
+        return false;
     }
 }
